@@ -32,7 +32,6 @@ export default function (opts) {
       chartData = chartData.concat({ x: timestamp, y: total })
 
       const startIndex = chartData.findIndex(d => d.x >= timestamp - opts.windowSize)
-      console.log({startIndex})
       if (startIndex > 0) chartData = chartData.slice(startIndex)
 
       if (opts.simplify) {
