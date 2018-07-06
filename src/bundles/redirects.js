@@ -11,4 +11,8 @@ export default {
       }
     }
   )
+
+  reactToIpfsConnectionFail: createSelector(
+    TODO: // redirect to welcome...
+  )
 }
