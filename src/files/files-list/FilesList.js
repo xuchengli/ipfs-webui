@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Checkbox from '../../components/checkbox/Checkbox'
 import SelectedActions from '../selected-actions/SelectedActions'
 import File from '../file/File'
+import ContextMenu from '../context-menu/ContextMenu'
 import { join } from 'path'
 import './FilesList.css'
 
@@ -42,8 +43,67 @@ class FileList extends React.Component {
 
   state = {
     selected: [],
+    contextMenu: {
+      visible: false,
+      top: 0,
+      left: 0
+    },
     sortBy: ORDER_BY_NAME,
     sortAsc: true
+  }
+
+  componentDidMount () {
+    window.addEventListener('scroll', this.onScroll)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.onScroll)
+  }
+
+  onContextMenu = (file) => (event) => {
+    event.preventDefault()
+
+    if (this.state.selected.length >= 1) {
+      this.toggleAll(false)
+    }
+
+    this.toggleOne(file.name, true)
+
+    const clickX = event.clientX
+    const clickY = event.clientY
+    const screenW = window.innerWidth
+    const screenH = window.innerHeight
+    const rootW = 200
+    const rootH = 500
+
+    let left
+    let top
+
+    if ((screenW - clickX) > rootW) {
+      left = clickX + 5
+    } else {
+      left = clickX - rootW - 5
+    }
+
+    if ((screenH - clickY) > rootH) {
+      top = clickY + 5
+    } else {
+      top = clickY - rootH - 5
+    }
+
+    this.setState({
+      contextMenu: {
+        visible: true,
+        top: clickY,
+        left: clickX
+      }
+    })
+  }
+
+  onScroll = () => {
+    if (this.state.contextMenu.visible) {
+      this.setState({ contextMenu: { visible: false } })
+    }
   }
 
   toggleAll = (checked) => {
@@ -60,7 +120,9 @@ class FileList extends React.Component {
     let selected = this.state.selected
 
     if (check) {
-      selected.push(name)
+      if (!selected.includes(name)) {
+        selected.push(name)
+      }
     } else {
       selected.splice(this.state.selected.indexOf(name), 1)
     }
@@ -132,6 +194,7 @@ class FileList extends React.Component {
         onSelect={this.toggleOne}
         onNavigate={this.genActionFromFile('onNavigate', file)}
         onCancel={this.genActionFromFile('onCancelUpload', file)}
+        onContextMenu={this.onContextMenu(file)}
         selected={this.state.selected.indexOf(file.name) !== -1}
         key={window.encodeURIComponent(file.name)}
         {...file}
@@ -166,7 +229,7 @@ class FileList extends React.Component {
     }
 
     return (
-      <section className={className}>
+      <section ref={(el) => { this.root = el }} className={className}>
         <header className='gray pv3 flex items-center'>
           <div className='ph2 w2'>
             <Checkbox checked={this.state.selected.length === this.props.files.length} onChange={this.toggleAll} />
@@ -185,6 +248,10 @@ class FileList extends React.Component {
         </header>
         {this.generateFiles()}
         {this.selectedMenu()}
+
+        { (this.state.contextMenu.visible || null) &&
+          <ContextMenu top={this.state.contextMenu.top} left={this.state.contextMenu.left} />
+        }
       </section>
     )
   }

@@ -6,9 +6,7 @@ import FileIcon from '../file-icon/FileIcon'
 import Status from '../status/Status'
 import './File.css'
 
-const File = (props) => {
-  let {selected, name, type, speed, status, size, onSelect, onNavigate, onCancel} = props
-
+const File = ({selected, name, type, speed, status, size, onSelect, onNavigate, onCancel, ...props}) => {
   let className = 'File flex items-center bt pv2'
 
   if (props.selected) {
@@ -31,7 +29,7 @@ const File = (props) => {
   }
 
   return (
-    <div className={className}>
+    <div className={className} {...props}>
       <div className='pa2 w2'>
         <Checkbox checked={selected} onChange={select} />
       </div>
