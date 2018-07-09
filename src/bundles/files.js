@@ -2,6 +2,8 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import { join, dirname } from 'path'
 import fileReader from 'pull-file-reader'
 
+const provs = {}
+
 const bundle = createAsyncResourceBundle({
   name: 'files',
   actionBaseType: 'FILES',

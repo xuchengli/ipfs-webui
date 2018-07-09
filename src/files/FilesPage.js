@@ -40,6 +40,7 @@ const defaultState = {
 class FilesPage extends React.Component {
   static propTypes = {
     files: PropTypes.object,
+    filesProvs: PropTypes.object,
     filesIsLoading: PropTypes.bool.isRequired,
     gatewayUrl: PropTypes.string.isRequired,
     doUpdateHash: PropTypes.func.isRequired,
@@ -162,7 +163,19 @@ class FilesPage extends React.Component {
   }
 
   render () {
-    const { files } = this.props
+    const { files, filesProvs } = this.props
+
+    if (files && files.files) {
+      files.files = files.files.map(file => {
+        if (filesProvs[file.hash] && filesProvs[file.hash].count) {
+          file.peers = filesProvs[file.hash].count
+        } else {
+          file.peers = 0
+        }
+
+        return file
+      })
+    }
 
     return (
       <div data-id='FilesPage'>
@@ -237,6 +250,7 @@ export default connect(
   'doFilesMakeDir',
   'selectFiles',
   'selectFilesIsLoading',
+  'selectFilesProvs',
   'selectGatewayUrl',
   FilesPage
 )

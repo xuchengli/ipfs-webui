@@ -11,6 +11,7 @@ import peerLocationsBundle from './peer-locations'
 import routesBundle from './routes'
 import redirectsBundle from './redirects'
 import filesBundle from './files'
+import filesProvsBundle from './files-provs'
 import configBundle from './config'
 import configSaveBundle from './config-save'
 
@@ -26,6 +27,7 @@ export default composeBundles(
   routesBundle,
   redirectsBundle,
   filesBundle,
+  filesProvsBundle(),
   configBundle,
   configSaveBundle
 )
