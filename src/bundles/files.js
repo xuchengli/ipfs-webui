@@ -2,8 +2,6 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import { join, dirname } from 'path'
 import fileReader from 'pull-file-reader'
 
-const provs = {}
-
 const bundle = createAsyncResourceBundle({
   name: 'files',
   actionBaseType: 'FILES',
@@ -58,8 +56,10 @@ bundle.reactFilesFetch = createSelector(
   'selectRouteInfo',
   'selectFiles',
   (isLoading, shouldUpdate, ipfsReady, {url, params}, files) => {
+    console.log(isLoading)
     if (!isLoading && ipfsReady && url.startsWith('/files')) {
       if (shouldUpdate || !files || files.path !== decodeURIComponent(params.path)) {
+        console.log('UPDAE')
         return { actionCreator: 'doFetchFiles' }
       }
     }
