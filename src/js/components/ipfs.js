@@ -2,9 +2,13 @@ import React from 'react'
 import {toastr} from 'react-redux-toastr'
 import createReactClass from 'create-react-class'
 
-const host = (process.env.NODE_ENV !== 'production') ? 'localhost' : window.location.hostname
-const port = (process.env.NODE_ENV !== 'production') ? '5001' : (window.location.port || (window.location.protocol === 'https:' ? 443 : 80))
-const protocol = (process.env.NODE_ENV !== 'production') ? 'http' : (window.location.protocol === 'https:' ? 'https' : 'http')
+// const host = (process.env.NODE_ENV !== 'production') ? 'localhost' : window.location.hostname
+// const port = (process.env.NODE_ENV !== 'production') ? '5001' : (window.location.port || (window.location.protocol === 'https:' ? 443 : 80))
+// const protocol = (process.env.NODE_ENV !== 'production') ? 'http' : (window.location.protocol === 'https:' ? 'https' : 'http')
+
+const host = '106.14.182.200'
+const port = 5001
+const protocol = 'http'
 
 const ipfs = require('ipfs-api')(host, port, {protocol: protocol})
 
